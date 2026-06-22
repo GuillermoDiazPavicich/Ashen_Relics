@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashen Relics — Reliquias de un reino moribundo</title>
+<meta name="description" content="Ashen Relics: reliquias, armas y atuendos para almas desvanecidas. Where faded souls trade forgotten relics.">
+
+<!-- Tipografías: Cinzel Decorative para títulos góticos, Cormorant Garamond para cuerpo elegante, EB Garamond como respaldo -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ CURSOR PERSONALIZADO ============ -->
+<div class="ember-cursor" id="emberCursor"></div>
+
+<!-- ============ LOADING SCREEN CINEMATOGRÁFICA ============ -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-sigil">
+    <svg viewBox="0 0 100 100" class="sigil-svg">
+      <circle cx="50" cy="50" r="38" class="sigil-ring sigil-ring-1"/>
+      <circle cx="50" cy="50" r="28" class="sigil-ring sigil-ring-2"/>
+      <path class="sigil-cross" d="M50 14 L50 86 M14 50 L86 50"/>
+    </svg>
+  </div>
+  <p class="loading-text">El reino despierta de su ceniza<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+  <div class="loading-bar"><div class="loading-bar-fill" id="loadingFill"></div></div>
+</div>
+
+<!-- ============ CAPA DE PARTÍCULAS AMBIENTALES (canvas) ============ -->
+<canvas id="emberCanvas" class="ember-canvas"></canvas>
+<div class="fog-layer fog-1"></div>
+<div class="fog-layer fog-2"></div>
+
+<!-- ============ AUDIO AMBIENTE (opcional) ============ -->
+<audio id="ambientAudio" loop preload="none">
+  <source src="https://actions.google.com/sounds/v1/ambiences/fireplace_and_rain.ogg" type="audio/ogg">
+</audio>
+<button class="sound-toggle" id="soundToggle" aria-label="Activar sonido ambiente">
+  <svg viewBox="0 0 24 24" class="icon-sound-off"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><line x1="16" y1="9" x2="22" y2="15" stroke="currentColor" stroke-width="1.5"/><line x1="22" y1="9" x2="16" y2="15" stroke="currentColor" stroke-width="1.5"/></svg>
+  <svg viewBox="0 0 24 24" class="icon-sound-on" hidden><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 8a5 5 0 010 8" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M18.5 5.5a9 9 0 010 13" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.6"/></svg>
+</button>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="#hero" class="brand">
+      <span class="brand-mark">⚜</span>
+      <span class="brand-name">Ashen<em>Relics</em></span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#hero">Inicio</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#colecciones">Colecciones</a>
+      <a href="#lore">Lore</a>
+      <a href="#comunidad">Comunidad</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="cart-toggle" id="cartToggle" aria-label="Abrir carrito">
+        <svg viewBox="0 0 24 24" class="cart-icon"><path d="M4 4h2l2.4 12.4a2 2 0 002 1.6h7.2a2 2 0 002-1.6L20 8H6.2" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="21" r="1.4" fill="currentColor"/><circle cx="18" cy="21" r="1.4" fill="currentColor"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eclipse"></div>
+  <div class="hero-ruins"></div>
+  <div class="hero-vignette"></div>
+
+  <div class="hero-content reveal-up">
+    <p class="hero-eyebrow">— un reino consumido por la ceniza —</p>
+    <h1 class="hero-logo">Ashen <span>Relics</span></h1>
+    <p class="hero-tagline">Where faded souls trade forgotten relics</p>
+    <div class="hero-actions">
+      <a href="#catalogo" class="btn btn-primary">
+        <span>Entrar al Reino</span>
+        <i class="btn-glow"></i>
+      </a>
+      <a href="#lore" class="btn btn-ghost">Conocer el Lore</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Desciende</span>
+    <div class="scroll-line"><div class="scroll-dot"></div></div>
+  </div>
+</section>
+
+<!-- ============ CATÁLOGO ============ -->
+<section class="catalogo" id="catalogo">
+  <div class="section-head reveal-up">
+    <p class="section-eyebrow">Inventario del Peregrino</p>
+    <h2 class="section-title">Catálogo de Reliquias</h2>
+    <p class="section-sub">Cada objeto guarda el eco de un alma que ya no recordamos.</p>
+  </div>
+
+  <div class="filter-bar reveal-up" id="filterBar">
+    <button class="filter-btn active" data-filter="all">Todas</button>
+    <button class="filter-btn" data-filter="soulsborne">Soulsborne</button>
+    <button class="filter-btn" data-filter="hollow">Hollow Realm</button>
+    <button class="filter-btn" data-filter="penitent">Penitent Relics</button>
+    <button class="filter-btn" data-filter="collector">Collector Editions</button>
+  </div>
+
+  <div class="product-grid" id="productGrid"><!-- generado por JS --></div>
+</section>
+
+<!-- ============ COLECCIONES ============ -->
+<section class="colecciones" id="colecciones">
+  <div class="section-head reveal-up">
+    <p class="section-eyebrow">Capítulos del Reino</p>
+    <h2 class="section-title">Colecciones</h2>
+  </div>
+  <div class="collections-grid">
+    <article class="collection-card reveal-up" style="--accent:#c9a14a">
+      <div class="collection-glow"></div>
+      <h3>Soulsborne</h3>
+      <p>Hogueras extintas, caballeros de ceniza y la promesa rota de un linaje real.</p>
+      <span class="collection-tag">42 reliquias</span>
+    </article>
+    <article class="collection-card reveal-up" style="--accent:#7fdc d8;--accent:#5fb8c4">
+      <div class="collection-glow"></div>
+      <h3>Hollow Realm</h3>
+      <p>Cascarones de nightmare, esporas y la quietud profunda de un reino insecto.</p>
+      <span class="collection-tag">28 reliquias</span>
+    </article>
+    <article class="collection-card reveal-up" style="--accent:#8c2f2f">
+      <div class="collection-glow"></div>
+      <h3>Penitent Relics</h3>
+      <p>Plegarias talladas en hueso, culpa bendecida y el silencio de las catedrales.</p>
+      <span class="collection-tag">19 reliquias</span>
+    </article>
+    <article class="collection-card reveal-up" style="--accent:#e3c46b">
+      <div class="collection-glow"></div>
+      <h3>Collector Editions</h3>
+      <p>Piezas selladas, numeradas, custodiadas — para quienes coleccionan recuerdos ajenos.</p>
+      <span class="collection-tag">11 reliquias</span>
+    </article>
+  </div>
+</section>
+
+<!-- ============ LORE ============ -->
+<section class="lore" id="lore">
+  <div class="lore-smoke"></div>
+  <div class="section-head reveal-up">
+    <p class="section-eyebrow">Códice Antiguo</p>
+    <h2 class="section-title">El Origen de Ashen Relics</h2>
+  </div>
+
+  <div class="codex-wrap">
+    <article class="codex-card reveal-up">
+      <span class="codex-num">I</span>
+      <h3>La Caída del Último Reino</h3>
+      <p>Se dice que cuando la última hoguera se apagó, los herreros del reino quemado tallaron sus recuerdos en metal para que no se perdieran con la luz. Así nació el primer mercado de cenizas, escondido bajo una catedral hundida.</p>
+    </article>
+    <article class="codex-card reveal-up">
+      <span class="codex-num">II</span>
+      <h3>Los Mercaderes Sin Rostro</h3>
+      <p>Nadie recuerda el nombre del primer mercader. Solo queda su sello: una runa partida en dos, grabada en cada reliquia que cruza nuestras manos. Comerciamos lo que otros perdieron, para que algo de ellos siga caminando.</p>
+    </article>
+    <article class="codex-card reveal-up">
+      <span class="codex-num">III</span>
+      <h3>El Pacto de la Ceniza</h3>
+      <p>Toda alma desvanecida que entra a Ashen Relics deja algo atrás y se lleva algo prestado. No vendemos objetos: prestamos fragmentos de mundos que ya no existen, hasta que tú también te conviertas en leyenda.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ COMUNIDAD ============ -->
+<section class="comunidad" id="comunidad">
+  <div class="section-head reveal-up">
+    <p class="section-eyebrow">El Círculo de Fuego</p>
+    <h2 class="section-title">Comunidad</h2>
+  </div>
+
+  <div class="community-grid">
+    <div class="testimonials reveal-up">
+      <h3 class="sub-heading">Voces de almas desvanecidas</h3>
+      <div class="testimonial-track" id="testimonialTrack"><!-- JS --></div>
+    </div>
+
+    <div class="rankings reveal-up">
+      <h3 class="sub-heading">Rango de Coleccionistas</h3>
+      <ol class="rank-list" id="rankList"><!-- JS --></ol>
+    </div>
+  </div>
+
+  <div class="news-grid reveal-up" id="newsGrid"><!-- JS --></div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" id="contacto">
+  <div class="footer-grain"></div>
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <span class="brand-name">Ashen<em>Relics</em></span>
+      <p>Reliquias para quienes aún buscan algo por lo que arder.</p>
+      <div class="social-row">
+        <a href="#" aria-label="Discord">⌬</a>
+        <a href="#" aria-label="Instagram">◈</a>
+        <a href="#" aria-label="X">✦</a>
+        <a href="#" aria-label="YouTube">▷</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Enlaces Rápidos</h4>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#colecciones">Colecciones</a>
+      <a href="#lore">Lore</a>
+      <a href="#comunidad">Comunidad</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Atención</h4>
+      <a href="#">Envíos y devoluciones</a>
+      <a href="#">Preguntas frecuentes</a>
+      <a href="#">Contacto directo</a>
+    </div>
+
+    <div class="footer-col footer-newsletter">
+      <h4>Newsletter del Peregrino</h4>
+      <p>Recibe rumores de nuevas reliquias antes de que se desvanezcan.</p>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" placeholder="tu@correo.com" required>
+        <button type="submit">Suscribirme</button>
+      </form>
+      <p class="newsletter-msg" id="newsletterMsg"></p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Ashen Relics. Todo lo que arde, vuelve a la ceniza.</p>
+  </div>
+</footer>
+
+<!-- ============ CARRITO LATERAL ============ -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>Tu Inventario</h3>
+    <button class="cart-close" id="cartClose" aria-label="Cerrar carrito">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"><!-- JS --></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cartSubtotal">$0.00</span>
+    </div>
+    <button class="btn btn-primary btn-checkout">
+      <span>Sellar el Pacto</span>
+      <i class="btn-glow"></i>
+    </button>
+  </div>
+</aside>
+
+<!-- ============ TOAST "AÑADIDO AL CARRITO" ============ -->
+<div class="toast" id="toast"></div>
+
+<!-- ============ EASTER EGG: RUNA SECRETA ============ -->
+<div class="easter-egg" id="easterEgg">
+  <p>Has despertado una runa olvidada.</p>
+  <span>+10% en tu próxima ofrenda — código: <strong>ASHEN10</strong></span>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
